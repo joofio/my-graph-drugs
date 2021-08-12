@@ -19,7 +19,7 @@
                                     "route": [
                                         "Rectal"
                                     ],
-                                    "name": "Panasorbe Paracetamol",
+                                    "name": "Panasorbe Paracetamol 1000 mg suppository",
                                     "strength": "1000 mg",
                                     "pharm_form": "suppository"
                                 }
@@ -33,7 +33,7 @@
                                 "properties": {
                                     "uid": "4eeccd0b9fbf47a0b7479535e0bd880b",
                                     "qty": 50,
-                                    "name": "Paracetamol Accel - 1000 mg / Supositório * Blister - 50 unidade(s)"
+                                    "name": "Paracetamol Accel - 1000 mg / suppository * Blister - 50 units"
                                 }
                             },
                             {
@@ -93,6 +93,22 @@
                                 }
                             },
                             {
+                                "alias": "tab 500 mg",
+                                "id":"42",
+                                "labels": [
+                                    "pharmaceuticalProduct"
+                                ],
+                                "properties": {
+                                    "name": "Paracetamol tablet 500 mg",
+                                    "uid": "6cbe01a673b64a54a033dbe65d5eef97",
+                                    "route": [
+                                        "Oral"
+                                    ],
+                                    "strength": "500 mg",
+                                    "pharm_form": "tablets"
+                                }
+                            },
+                            {
                                 "alias": "Paracetamol",
                                 "id": "59",
                                 "labels": [
@@ -132,6 +148,12 @@
                                 "type": "ACTIVE_PRINCIPLE_OF",
                                 "startNode": "59",
                                 "endNode": "41",
+                                "properties": {}
+                            },  {
+                                "id": "21",
+                                "type": "ACTIVE_PRINCIPLE_OF",
+                                "startNode": "59",
+                                "endNode": "42",
                                 "properties": {}
                             },
                             {
