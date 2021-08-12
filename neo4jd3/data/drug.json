@@ -1,153 +1,157 @@
 {
-    "results": [{
-        "columns": [
-            "Substance"
-        ],
-        "data": [{
-            "graph": {
-                "nodes": [{
-                        "alias": "Panasorbe",
-                        "id": "347",
-                        "labels": [
-                            "medicinalProduct"
+    "results": [
+        {
+            "columns": [
+                "Substance"
+            ],
+            "data": [
+                {
+                    "graph": {
+                        "nodes": [
+                            {
+                                "alias": "Panasorbe",
+                                "id": "347",
+                                "labels": [
+                                    "medicinalProduct"
+                                ],
+                                "properties": {
+                                    "uid": "123388fd70034d53924283b8afd0c53e",
+                                    "route": [
+                                        "Rectal"
+                                    ],
+                                    "name": "Panasorbe Paracetamol",
+                                    "strength": "1000 mg",
+                                    "pharm_form": "suppository"
+                                }
+                            },
+                            {
+                                "alias": "50 units",
+                                "id": "509",
+                                "labels": [
+                                    "packagedMedicinalProduct"
+                                ],
+                                "properties": {
+                                    "uid": "4eeccd0b9fbf47a0b7479535e0bd880b",
+                                    "qty": 50,
+                                    "name": "Paracetamol Accel - 1000 mg / Supositório * Blister - 50 unidade(s)"
+                                }
+                            },
+                            {
+                                "alias": "Accel",
+                                "id": "507",
+                                "labels": [
+                                    "medicinalProduct"
+                                ],
+                                "properties": {
+                                    "name": "Paracetamol Accel 1000 mg suppository",
+                                    "uid": "77108be512da4b7cb45ea96819b1410b",
+                                    "route": [
+                                        "Rectal"
+                                    ],
+                                    "strength": "1000 mg",
+                                    "pharm_form": "suppository"
+                                }
+                            },
+                            {
+                                "alias": "10 units",
+                                "id": "508",
+                                "labels": [
+                                    "packagedMedicinalProduct"
+                                ],
+                                "properties": {
+                                    "uid": "5aee12bca57e444487e4f6e47b06e614",
+                                    "qty": 10,
+                                    "name": "Paracetamol Accel - 1000 mg / suppository * Blister - 10 units"
+                                }
+                            },
+                            {
+                                "alias": "10 units",
+                                "id": "348",
+                                "labels": [
+                                    "packagedMedicinalProduct"
+                                ],
+                                "properties": {
+                                    "uid": "07d1037965994f248fb7eb5368d7b013",
+                                    "qty": 10,
+                                    "name": "Panasorbe - 1000 mg / suppository * Blister - 10 units"
+                                }
+                            },
+                            {
+                                "alias": "Sup 1000 mg",
+                                "labels": [
+                                    "pharmaceuticalProduct"
+                                ],
+                                "properties": {
+                                    "name": "Paracetamol suppository 1000 mg",
+                                    "uid": "6cbe01a673b64a54a033dbe65d5eef98",
+                                    "route": [
+                                        "Rectal"
+                                    ],
+                                    "strength": "1000 mg",
+                                    "pharm_form": "suppository"
+                                }
+                            },
+                            {
+                                "alias": "Paracetamol",
+                                "id": "59",
+                                "labels": [
+                                    "substance"
+                                ],
+                                "properties": {
+                                    "uid": "4ce3a18702da43549dec149fa80e968a",
+                                    "description": "Paracetamol",
+                                    "ATC": "N02BE01"
+                                }
+                            }
                         ],
-                        "properties": {
-                            "uid": "123388fd70034d53924283b8afd0c53e",
-                            "route": [
-                                "Rectal"
-                            ],
-                            "name": "Panasorbe Paracetamol",
-                            "dosagem": "1000 mg",
-                            "pharm_form": "suppository"
-                        }
-                    },
-                    {
-                        "alias": "50 units",
-                        "id": "509",
-                        "labels": [
-                            "packagedMedicinalProduct"
-                        ],
-                        "properties": {
-                            "uid": "4eeccd0b9fbf47a0b7479535e0bd880b",
-                            "qty":50,
-                            "name": "Paracetamol Accel (Paracetamol) - 1000 mg / Supositório * Blister - 50 unidade(s)"
-                        }
-                    },
-                    {
-                        "alias": "Accel",
-                        "id": "507",
-                        "labels": [
-                            "medicinalProduct"
-                        ],
-                        "properties": {
-                            "name": "Paracetamol Accel Paracetamol",
-                            "uid": "77108be512da4b7cb45ea96819b1410b",
-                            "route": [
-                                "Rectal"
-                            ],
-                            "dosagem": "1000 mg",
-                            "pharm_form": "suppository"
-                        }
-                    },
-                    {
-                        "alias": "10 units",
-                        "id": "508",
-                        "labels": [
-                            "packagedMedicinalProduct"
-                        ],
-                        "properties": {
-                            "uid": "5aee12bca57e444487e4f6e47b06e614",
-                            "qty": 10,
-                            "name": "Paracetamol Accel - 1000 mg / suppository * Blister - 10 units"
-                        }
-                    },
-                    {
-                        "alias": "10 units",
-                        "id": "348",
-                        "labels": [
-                            "packagedMedicinalProduct"
-                        ],
-                        "properties": {
-                            "uid": "07d1037965994f248fb7eb5368d7b013",
-                            "qty": 10,
-                            "name": "Panasorbe (Paracetamol) - 1000 mg / suppository * Blister - 10 units"
-                        }
-                    },
-                    {
-                        "alias": "Sup 1000 mg",
-                        "id": "41",
-                        "labels": [
-                            "pharmaceuticalProduct"
-                        ],
-                        "properties": {
-                            "name": "Paracetamol",
-                            "uid": "6cbe01a673b64a54a033dbe65d5eef98",
-                            "route": [
-                                "Rectal"
-                            ],
-                            "dosagem": "1000 mg",
-                            "pharm_form": "suppository"
-                        }
-                    },
-                    {
-                        "alias": "paracetamol",
-
-                        "id": "59",
-                        "labels": [
-                            "substance"
-                        ],
-                        "properties": {
-                            "uid": "4ce3a18702da43549dec149fa80e968a",
-                            "description": "Paracetamol",
-                            "ATC": "N02BE01"
-                        }
+                        "relationships": [
+                            {
+                                "id": "155",
+                                "type": "PACKAGED_FORM_OF",
+                                "startNode": "509",
+                                "endNode": "507",
+                                "properties": {}
+                            },
+                            {
+                                "id": "154",
+                                "type": "PACKAGED_FORM_OF",
+                                "startNode": "508",
+                                "endNode": "507",
+                                "properties": {}
+                            },
+                            {
+                                "id": "100",
+                                "type": "PACKAGED_FORM_OF",
+                                "startNode": "348",
+                                "endNode": "347",
+                                "properties": {}
+                            },
+                            {
+                                "id": "20",
+                                "type": "ACTIVE_PRINCIPLE_OF",
+                                "startNode": "59",
+                                "endNode": "41",
+                                "properties": {}
+                            },
+                            {
+                                "id": "118",
+                                "type": "IS_A_BRAND_OF",
+                                "startNode": "507",
+                                "endNode": "41",
+                                "properties": {}
+                            },
+                            {
+                                "id": "99",
+                                "type": "IS_A_BRAND_OF",
+                                "startNode": "347",
+                                "endNode": "41",
+                                "properties": {}
+                            }
+                        ]
                     }
-                ],
-                "relationships": [{
-                        "id": "155",
-                        "type": "PACKAGED_FORM_OF",
-                        "startNode": "509",
-                        "endNode": "507",
-                        "properties": {}
-                    },
-                    {
-                        "id": "154",
-                        "type": "PACKAGED_FORM_OF",
-                        "startNode": "508",
-                        "endNode": "507",
-                        "properties": {}
-                    },
-                    {
-                        "id": "100",
-                        "type": "PACKAGED_FORM_OF",
-                        "startNode": "348",
-                        "endNode": "347",
-                        "properties": {}
-                    },
-                    {
-                        "id": "20",
-                        "type": "ACTIVE_PRINCIPLE_OF",
-                        "startNode": "59",
-                        "endNode": "41",
-                        "properties": {}
-                    },
-                    {
-                        "id": "118",
-                        "type": "IS_A_BRAND_OF",
-                        "startNode": "507",
-                        "endNode": "41",
-                        "properties": {}
-                    },
-                    {
-                        "id": "99",
-                        "type": "IS_A_BRAND_OF",
-                        "startNode": "347",
-                        "endNode": "41",
-                        "properties": {}
-                    }
-                ]
-            }
-        }]
-    }],
+                }
+            ]
+        }
+    ],
     "errors": []
 }
