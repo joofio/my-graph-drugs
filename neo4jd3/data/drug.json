@@ -78,6 +78,7 @@
                             },
                             {
                                 "alias": "Sup 1000 mg",
+                                "id":"41",
                                 "labels": [
                                     "pharmaceuticalProduct"
                                 ],
