@@ -23,10 +23,10 @@ const nodes = [
     id: "MedicationKnowledge/25",
     size: 100,
     productType: "Substance",
-    label: "Paracetamol:\nStatus: Active\nProductType: Substance\n Synonym: AcetominoPhen",
+    label: "<b>Paracetamol</b>\n<b>Status:</b> Active\n<b>ProductType:</b> Substance\n <b>Synonym:</b> AcetominoPhen",
     color: "#E5E5FF",
     shape: "box",
-    font: { face: "monospace", align: "left" },
+    font: { multi: "html", face: "monospace", align: "left" }},
   },
   {
     id: "MedicationKnowledge/24",
