@@ -8,89 +8,164 @@
 </head>
 
 <body>
-  <label>
-    Filter nodes
-    <select id="nodeFilterSelect">
-      <option value="MedicationKnowledge/25">Diclofenac</option>
-      <option value="MedicationKnowledge/24">Paracetamol</option>
 
-    </select>
-  </label>
-  <br>
-  </div>
+
   <div>
     <div id="mynetwork"></div>
     <br />
     <script type="text/javascript">
-
-function nodesFilter_create(node,selection) {
-
-          var i, j;
-          var selectedNode = selection
-          var degrees = 2;
-          var data = { nodes: _nodes, edges: _edges }; // Note: data is coming from ./datasources/WorldCup2014.js
-          var network = new vis.Network(container, data, options);
-
-     //    console.log(selectedNode)
-      //  console.log(allNodes)
-          var connectedNodes = network.getConnectedNodes(selectedNode);
-          var connectedEdges = network.getConnectedEdges(selectedNode)  
-          
-          
-          var allConnectedNodes = [];
-          var allConnectedEdges=[];
-          // get the second degree nodes
-          for (i = 1; i < degrees; i++) {
-            for (j = 0; j < connectedNodes.length; j++) {
-              allConnectedNodes = allConnectedNodes.concat(
-                network.getConnectedNodes(connectedNodes[j]))
-                allConnectedEdges = allConnectedEdges.concat(
-                network.getConnectedEdges(connectedNodes[j]))
-              ;
-            }
-          }
-
-        
-      };
-
-      const nodeFilterSelector = document.getElementById("nodeFilterSelect");
       var network;
       var allNodes;
-      const container = document.getElementById("mynetwork");
+      var highlightActive = false;
+      var nodesDataset = new vis.DataSet(nodes); // these come from WorldCup2014.js
+      var edgesDataset = new vis.DataSet(edges); // these come from WorldCup2014.js
+      // get a JSON object
+      allNodes = nodesDataset.get({ returnType: "Object" });
+      allEdges = edgesDataset.get({ returnType: "Object" });
 
-      const _nodes = new vis.DataSet(nodes);
-      allNodes = _nodes.get({ returnType: "Object" });
-      const _edges = new vis.DataSet(edges);
-      
-      console.log(nodes)
-    
-      const nodesView = new vis.DataView(nodes,{filter:nodesFilter_create(item,"MedicationKnowledge/24")["nodes"]});
-     // const edgesView = new vis.DataView(edges, { filter: edgesFilter });
-      const edgesView = new vis.DataView(edges,{ filter: nodesFilter_create(item,"MedicationKnowledge/24")["edges"] });
+      var container = document.getElementById("mynetwork");
 
-      function startNetwork(data) {
+      function redrawAll() {
+        const options = {
+          manipulation: false,
+          height: "90%",
+          layout: {
+            hierarchical: {
+              enabled: true,
+              levelSeparation: 300,
+            },
+          },
+          physics: {
+            hierarchicalRepulsion: {
+              nodeDistance: 300,
+            },
+          },
+        };
 
-        const options = {};
-        new vis.Network(container, data, options);
+
+        // transform the object into an array
+        var updateArray = [];
+        for (edgeId in allEdges) {
+          allEdges[edgeId].hidden=true;
+          updateArray.push(allEdges[edgeId]);
+
+        }
+        edgesDataset.update(updateArray);
+        // transform the object into an array
+        var updateArray = [];
+        for (nodeId in allNodes) {
+          if (allNodes[nodeId].productType!="Substance"){
+            allNodes[nodeId].hidden=true
+          }
+          updateArray.push(allNodes[nodeId]);
+
+        }
+        nodesDataset.update(updateArray);
+
+        var data = { nodes: nodesDataset, edges: edgesDataset }; // Note: data is coming from ./datasources/WorldCup2014.js
+
+        network = new vis.Network(container, data, options);
+
+        network.on("click", neighbourhoodHighlight);
       }
 
-      /**
-       * In this example we do not mutate nodes or edges source data.
-       */
-
-      nodeFilterSelector.addEventListener("change", (e) => {
-        // set new value to filter variable
-        nodeFilterValue = e.target.value;
-        /*
-        refresh DataView,
-        so that its filter function is re-calculated with the new variable
-      */
-        nodesView.refresh();
-      });
+      function get_neibours(degrees, selectedNode) {
 
 
+        // hid all nodes
+        for (var nodeId in allNodes) {
 
-      startNetwork({ nodes: nodesView, edges: edgesView });
+          allNodes[nodeId].hidden = true;
+
+        }
+        // mark all edges as hidden
+        for (var edgeId in allEdges) {
+
+          allEdges[edgeId].hidden = true;
+
+        }
+        allNodes[selectedNode].hidden = false;
+
+        var connectedNodes = network.getConnectedNodes(selectedNode);
+        var connectedEdges = network.getConnectedEdges(selectedNode);
+        var allConnectedNodes = connectedNodes;
+        var allConnectedEdges = connectedEdges;
+        /* var allConnectedNodes = [];
+        var allConnectedEdges = [];
+        
+        // get the second degree nodes
+        for (i = 1; i < degrees; i++) {
+          for (j = 0; j < connectedNodes.length; j++) {
+            allConnectedNodes = allConnectedNodes.concat(
+              network.getConnectedNodes(connectedNodes[j])
+            );
+            console.log(network.getConnectedEdges(connectedNodes[j]))
+            allConnectedEdges = allConnectedEdges.concat(
+              network.getConnectedEdges(connectedNodes[j])
+            );
+          }
+        }
+        console.log(allConnectedNodes)
+        console.log(allConnectedEdges)
+        */
+        // remove hidden from showing nodes
+        for (i = 0; i < allConnectedNodes.length; i++) {
+
+          allNodes[allConnectedNodes[i]].hidden = false;
+
+
+        }
+        // remove hidden from showing edges
+        for (i = 0; i < allConnectedEdges.length; i++) {
+          allEdges[allConnectedEdges[i]].hidden = false;
+
+
+        }
+        return [allConnectedNodes, allConnectedEdges]
+      }
+
+      function neighbourhoodHighlight(params) {
+        // if something is selected:
+        if (params.nodes.length > 0) {
+          highlightActive = true;
+          var i, j;
+          var selectedNode = params.nodes[0];
+          var result = get_neibours(2, selectedNode)
+          allConnectedNodes = result[0]
+          allConnectedEdges = result[1]
+
+        } else if (highlightActive === true) {
+          // reset all nodes
+          for (var nodeId in allNodes) {
+            allNodes[nodeId].hidden = false;
+
+          }
+          for (var edgeId in allEdges) {
+            allEdges[edgeId].hidden = false;
+
+          }
+          highlightActive = false;
+        } 
+
+
+        // transform the object into an array
+        var updateArray = [];
+        for (nodeId in allNodes) {
+          updateArray.push(allNodes[nodeId]);
+
+        }
+        nodesDataset.update(updateArray);
+
+        // transform the object into an array
+        var updateArray = [];
+        for (edgeId in allEdges) {
+          updateArray.push(allEdges[edgeId]);
+
+        }
+        edgesDataset.update(updateArray);
+
+      }
+      redrawAll();
     </script>
 </body>
 
