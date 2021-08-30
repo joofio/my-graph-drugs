@@ -19,24 +19,21 @@ const options = {
 
 
 const nodes = [
-  {
-    id: "MedicationKnowledge/25",
-    size: 100,
-    productType: "Substance",
-    label: "<b>Paracetamol</b>\n<b>Status:</b> Active\n<b>ProductType:</b> Substance\n <b>Synonym:</b> AcetominoPhen",
-    color: "#E5E5FF",
-    shape: "box",
-    font: { multi: "html", face: "monospace", align: "left" }},
-  },
-  {
-    id: "MedicationKnowledge/24",
-    size: 100,
-    productType: "Substance",
-    label: "Diclofenac:\nStatus: Active\nProductType: Substance",
-    color: "#E5E5FF",
-    shape: "box",
-    font: { face: "monospace", align: "left" },
-  },
+
+  {id: "MedicationKnowledge/25",
+productType: "substance",
+size: 100,
+label: "<b>ProductType:</b> Substance\n<b>status</b>: active\n<b>synonym_0</b>: Diclofenac\n<b>synonym_1</b>: Diclofenac\n<b>drugType</b>: small molecule\n",
+color: "#E5E5FF",
+shape: "box",
+font: { multi: "html", face: "monospace", align: "left" },},
+{id: "MedicationKnowledge/24",
+productType: "substance",
+size: 100,
+label: "<b>ProductType:</b> Substance\n<b>status</b>: active\n<b>synonym_0</b>: Paracetamol\n<b>synonym_1</b>: Acetaminophen\n<b>drugType</b>: small molecule\n",
+color: "#E5E5FF",
+shape: "box",
+font: { multi: "html", face: "monospace", align: "left" },},
   {
     id: "MedicationKnowledge/27",
     size: 120,
@@ -74,6 +71,14 @@ label: "ProductTye: pack_med_product\n  status: active\n synonym: Cataflam 50 mg
 color: "#76D7C4",
 shape: "box",
 font: { face: "monospace", align: "left" }},
+{id: "MedicationKnowledge/38",
+ProductType: "pharmprod",
+size: 120,
+label: "<b>ProductType:</b> Pharmaceutical Product\n<b>status</b>: active\n<b>synonym_0</b>: Paracetamol 10mg/ml Solução para perfusão\n<b>drugType</b>: small molecule\n<b>amount_value</b>: 10\n<b>amount_unit</b>: mg\n<b>doseForm_coding_0_display</b>: Solução para perfusão\n",
+color: "#FFCFCF",
+shape: "box",
+font: { multi: "html", face: "monospace", align: "left" },},
+
 ];
 
 //
@@ -85,6 +90,14 @@ font: { face: "monospace", align: "left" }},
 // The edges with these id's will not load into the Network instance.
 //
 const edges = [
+  {
+    from: "MedicationKnowledge/38",
+    to: "MedicationKnowledge/25",
+    arrows: "to",
+    label: "pharmaceutical Product of",
+    physics: false,
+    smooth: { type: "cubicBezier" },
+  },
   {
     from: "MedicationKnowledge/27",
     to: "MedicationKnowledge/24",
@@ -124,3 +137,4 @@ const edges = [
     smooth: { type: "cubicBezier" },
   },
 ];
+
