@@ -1,21 +1,7 @@
 // These variables will be injected into a page that will use them.
 /* eslint no-unused-vars: "off" */
 
-const options = {
-  manipulation: false,
-  height: "90%",
-  layout: {
-    hierarchical: {
-      enabled: true,
-      levelSeparation: 300,
-    },
-  },
-  physics: {
-    hierarchicalRepulsion: {
-      nodeDistance: 300,
-    },
-  },
-};
+
 
 
 const nodes = [

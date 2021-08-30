@@ -1,11 +1,11 @@
-<html lang="en">
+<html lang="pt">
 
 <head>
   <title>Drug Graph visualizer</title>
 
   <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
   <script src="main2.js"></script>
-  
+
 </head>
 
 <body>
@@ -19,88 +19,88 @@
 
     </select>
   </label>
-   <div id="mynetwork"></div>
-    <br />
-    <script type="text/javascript">
-          var network;
+  <div id="mynetwork"></div>
+  <br />
+  <script type="text/javascript">
+    var network;
+    var options = {
+    
+          physics: {
+            hierarchicalRepulsion: {
+              avoidOverlap: 100,
+            },
+          },
+        };
+    let nodeFilterValue = "";
 
-      const nodeFilterSelector = document.getElementById("nodeFilterSelect");
+    const nodeFilterSelector = document.getElementById("nodeFilterSelect");
 
-      function startNetwork(data) {
-        const container = document.getElementById("mynetwork");
-        const options = {};
-        network=new vis.Network(container, data, options);
+    function startNetwork(data) {
+      const container = document.getElementById("mynetwork");
+      network = new vis.Network(container, data, options);
+    }
+    var nodesDataset = new vis.DataSet(nodes); // these come from WorldCup2014.js
+    var edgesDataset = new vis.DataSet(edges); // these come from WorldCup2014.js
+    // get a JSON object
+    allNodes = nodesDataset.get({ returnType: "Object" });
+    allEdges = edgesDataset.get({ returnType: "Object" });
+
+
+
+    function get_neibours(node, degrees, selectedNode) {
+      if (node.id == selectedNode) {
+        return true;
       }
-      var nodesDataset = new vis.DataSet(nodes); // these come from WorldCup2014.js
-      var edgesDataset = new vis.DataSet(edges); // these come from WorldCup2014.js
-      // get a JSON object
-      allNodes = nodesDataset.get({ returnType: "Object" });
-      allEdges = edgesDataset.get({ returnType: "Object" });
-
-
-
-      function get_neibours(node,degrees, selectedNode) {
-        if (node.id==selectedNode){
+      for (edge in allEdges) {
+        if ((allEdges[edge].from === node.id && allEdges[edge].to === selectedNode) || (allEdges[edge].from === selectedNode && allEdges[edge].to === node.id)) {
           return true;
-        }
-        for (edge in allEdges){
-          if ((allEdges[edge].from === node.id && allEdges[edge].to ===selectedNode)||(allEdges[edge].from === selectedNode && allEdges[edge].to ===node.id)){
-            return true;
 
-          }
         }
-        return false;
       }
+      return false;
+    }
 
-       let nodeFilterValue = "";
 
-       function return_node_neighbours(node){
-          result=get_neibours(node,2,nodeFilterValue)
-    //      console.log(result)
-         return result;
-       }
+    function return_node_neighbours(node) {
+      result = get_neibours(node, 2, nodeFilterValue)
+      //      console.log(result)
+      return result;
+    }
+
+    const nodesFilter = (node) => {
+      if (nodeFilterValue === "") {
+        return node.productType === "substance";
+      }
+      return return_node_neighbours(node)
+
+    };
+
+
+    const nodesView = new vis.DataView(nodesDataset, { filter: nodesFilter });
+
+    nodeFilterSelector.addEventListener("change", (e) => {
+      // set new value to filter variable
+      nodeFilterValue = e.target.value;
       /*
-      filter function should return true or false
-      based on whether item in DataView satisfies a given condition.
+      refresh DataView,
+      so that its filter function is re-calculated with the new variable
     */
-      const nodesFilter = (node) => {
-        if (nodeFilterValue === "") {
-          return node.productType==="substance";
-        }
-        return return_node_neighbours(node)
+      nodesView.refresh();
+    });
 
-      };
+    startNetwork({ nodes: nodesView, edges: edges });
 
-    /*  const edgesFilter = (edge) => {
-        return edgesFilterValues[edge.relation];
-      };*/
-
-      const nodesView = new vis.DataView(nodesDataset, { filter: nodesFilter });
-
-      nodeFilterSelector.addEventListener("change", (e) => {
-        // set new value to filter variable
-        nodeFilterValue = e.target.value;
-        /*
-        refresh DataView,
-        so that its filter function is re-calculated with the new variable
-      */
-        nodesView.refresh();
-      });
-
-      startNetwork({ nodes: nodesView, edges: edges });
-
-      function updateviewnetwork(params){
-        console.log("runn")
-        nodeFilterValue=params["nodes"][0]
-        console.log(nodeFilterValue)
-      //  var nodesDataset = new vis.DataSet(nodes); 
-
-     //   const nodesView = new vis.DataView(nodesDataset, { filter: return_node_neighbours });
-        nodesView.refresh();
+    function updateviewnetwork(params) {
+      nodeFilterValue = params["nodes"][0]
+      if (nodeFilterValue == undefined) { //reset
+        nodeFilterValue = ""
       }
-      network.on("click", updateviewnetwork);
 
-    </script>
+      nodesView.refresh();
+    }
+    network.on("click", updateviewnetwork);
+
+  </script>
 </body>
 
 </html>
