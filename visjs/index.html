@@ -5,6 +5,14 @@
 
   <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
   <script src="main.js"></script>
+  
+  <style type="text/css">
+    #mynetwork {
+      width: 800px;
+      height: 800px;
+      border: 1px solid lightgray;
+    }
+  </style>
 </head>
 
 <body>
@@ -18,7 +26,8 @@
     doing the highlighting only takes about 1ms, the rest of the time is the
     redrawing of the network (9200 edges..).
     <br /><br />
-  </div>    <div id="mynetwork"></div>
+  </div>   
+   <div id="mynetwork"></div>
     <br />
     <script type="text/javascript">
       var network;
@@ -33,21 +42,38 @@
       var container = document.getElementById("mynetwork");
 
       function redrawAll() {
-        const options = {
-          manipulation: false,
-          height: "90%",
+        var options = {
+          nodes: {
+            font: {
+              size: 12,
+              face: "Tahoma",
+            },
+          },
+          edges: {
+            width: 0.15,
+            color: { inherit: "from" },
+            smooth: {
+              type: "continuous",
+            },
+          },
+          interaction: {
+            tooltipDelay: 200,
+            hideEdgesOnDrag: true,
+            hideEdgesOnZoom: true,
+          },       
           layout: {
             hierarchical: {
-              enabled: true,
-              levelSeparation: 300,
+              direction: "UD",
+              sortMethod: "directed",
             },
           },
           physics: {
             hierarchicalRepulsion: {
-              nodeDistance: 300,
+              avoidOverlap: 2,
             },
           },
         };
+        
 
 
         // transform the object into an array
