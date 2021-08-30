@@ -1,21 +1,97 @@
 <html lang="en">
-  <head>
-    <title>Vis Network | Example Applications | Disassembler</title>
 
-    <script
-    type="text/javascript"
-    src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"
-    ></script>
-    <script src="main.js"></script>
-  </head>
-  <body>
+<head>
+  <title>Drug Graph visualizer</title>
 
+  <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <label>
+    Filter nodes
+    <select id="nodeFilterSelect">
+      <option value="MedicationKnowledge/25">Diclofenac</option>
+      <option value="MedicationKnowledge/24">Paracetamol</option>
+
+    </select>
+  </label>
+  <br>
+  </div>
+  <div>
     <div id="mynetwork"></div>
     <br />
     <script type="text/javascript">
-      var container = document.getElementById("mynetwork");
-      var data = { nodes: nodes, edges: edges };
-      var gph = new vis.Network(container, data, options);
+
+function nodesFilter_create(node,selection) {
+
+          var i, j;
+          var selectedNode = selection
+          var degrees = 2;
+          var data = { nodes: _nodes, edges: _edges }; // Note: data is coming from ./datasources/WorldCup2014.js
+          var network = new vis.Network(container, data, options);
+
+     //    console.log(selectedNode)
+      //  console.log(allNodes)
+          var connectedNodes = network.getConnectedNodes(selectedNode);
+          var connectedEdges = network.getConnectedEdges(selectedNode)  
+          
+          
+          var allConnectedNodes = [];
+          var allConnectedEdges=[];
+          // get the second degree nodes
+          for (i = 1; i < degrees; i++) {
+            for (j = 0; j < connectedNodes.length; j++) {
+              allConnectedNodes = allConnectedNodes.concat(
+                network.getConnectedNodes(connectedNodes[j]))
+                allConnectedEdges = allConnectedEdges.concat(
+                network.getConnectedEdges(connectedNodes[j]))
+              ;
+            }
+          }
+
+        
+      };
+
+      const nodeFilterSelector = document.getElementById("nodeFilterSelect");
+      var network;
+      var allNodes;
+      const container = document.getElementById("mynetwork");
+
+      const _nodes = new vis.DataSet(nodes);
+      allNodes = _nodes.get({ returnType: "Object" });
+      const _edges = new vis.DataSet(edges);
+      
+      console.log(nodes)
+    
+      const nodesView = new vis.DataView(nodes,{filter:nodesFilter_create(item,"MedicationKnowledge/24")["nodes"]});
+     // const edgesView = new vis.DataView(edges, { filter: edgesFilter });
+      const edgesView = new vis.DataView(edges,{ filter: nodesFilter_create(item,"MedicationKnowledge/24")["edges"] });
+
+      function startNetwork(data) {
+
+        const options = {};
+        new vis.Network(container, data, options);
+      }
+
+      /**
+       * In this example we do not mutate nodes or edges source data.
+       */
+
+      nodeFilterSelector.addEventListener("change", (e) => {
+        // set new value to filter variable
+        nodeFilterValue = e.target.value;
+        /*
+        refresh DataView,
+        so that its filter function is re-calculated with the new variable
+      */
+        nodesView.refresh();
+      });
+
+
+
+      startNetwork({ nodes: nodesView, edges: edgesView });
     </script>
-  </body>
+</body>
+
 </html>
