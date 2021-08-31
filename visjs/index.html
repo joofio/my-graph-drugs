@@ -2,38 +2,77 @@
 
 <head>
   <title>Drug Graph visualizer</title>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+    crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
   <script src="main2.js"></script>
-
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+<style>
+  #mynetwork {
+  border: 1px solid black;
+}
+</style>
 </head>
 
 <body>
-  <h2>Drug Graph network - click on one product to show tree</h2>
-  <label>
-    Filter nodes
-    <select id="nodeFilterSelect">
-      <option value="">Substance</option>
-      <option value="MedicationKnowledge/1112">Diclofenac</option>
-      <option value="MedicationKnowledge/1113">Paracetamol</option>
+  <div class="container-fluid">
+    <h2>Drug Graph Network</h2>
+    <div class="row">
+      <div class="col-4">
+        <label>
+          Substance 
+          <select id="substanceFilterSelect">
+            <option value="">All Substances</option>
+            <option value="MedicationKnowledge/1112">Diclofenac</option>
+            <option value="MedicationKnowledge/1113">Paracetamol</option>
+          </select>
+        </label>
+      </div>
+      <div class="col-4">
+        <label>
+          Pharmaceutical Form 
+          <select id="PharmFormFilterSelect">
+            <option value="">All Forms</option>
+            <option value="Comprimido">CP</option>
+            <option value="Solução Oral">SO</option>
+          </select>
+        </label>
+      </div>
+      <div class="col-4">
+        <label>
+          Route 
+          <select id="RouteFilterSelect">
+            <option value="">All Routes</option>
+            <option value="Oral">Oral</option>
+            <option value="Prefusão">Perfusão</option>
+          </select>
+        </label>
+      </div>
+    </div>
+<br>
+    <div id="mynetwork"></div>
+  </div>
 
-    </select>
-  </label>
-  <div id="mynetwork"></div>
   <br />
   <script type="text/javascript">
     var network;
     var options = {
-          physics: {
-            hierarchicalRepulsion: {
-              avoidOverlap: 100,
-            },
-          },
-        };
-    let nodeFilterValue = "";
-    const nodeFilterSelector = document.getElementById("nodeFilterSelect");
-    var nodesDataset = new vis.DataSet(nodes); 
-    var edgesDataset = new vis.DataSet(edges); 
+      physics: {
+        hierarchicalRepulsion: {
+          avoidOverlap: 300,
+        },
+      },
+    };
+    let substanceFilterValue = "";
+    let pharmFormFilterValue = "";
+
+    const substanceFilterSelector = document.getElementById("substanceFilterSelect");
+    const pharmFormFilterSelector = document.getElementById("PharmFormFilterSelect");
+
+    var nodesDataset = new vis.DataSet(nodes);
+    var edgesDataset = new vis.DataSet(edges);
     // get a JSON object
     allNodes = nodesDataset.get({ returnType: "Object" });
     allEdges = edgesDataset.get({ returnType: "Object" })
@@ -44,10 +83,26 @@
       network = new vis.Network(container, data, options);
     }
 
-    function get_connected_nodes(node, degrees, selectedNode) {
+    function get_connected_nodes(node, degrees, selectedNode, pharmForm) {
       if (node.id == selectedNode) {
         return true;
       }
+      if (pharmForm != "" && node.pharmForm != pharmForm) {
+        console.log(pharmForm)
+        return false;
+      }
+
+      if (selectedNode == "") { //no selection, only selector
+        for (edge in allEdges) {
+          if (allEdges[edge].from === node.id || allEdges[edge].to === node.id) {
+
+            return true;
+
+          }
+        }
+        return false;
+      }
+
       for (edge in allEdges) {
         if ((allEdges[edge].from === node.id && allEdges[edge].to === selectedNode) || (allEdges[edge].from === selectedNode && allEdges[edge].to === node.id)) {
           return true;
@@ -58,18 +113,18 @@
     }
 
     const nodesFilter = (node) => {
-      if (nodeFilterValue === "") {
+      if (substanceFilterValue === "" && pharmFormFilterValue === "") {//default
         return node.productType === "substance";
       }
-      return get_connected_nodes(node,2,nodeFilterValue)
+      return get_connected_nodes(node, 2, substanceFilterValue, pharmFormFilterValue)
 
     };
 
     const nodesView = new vis.DataView(nodesDataset, { filter: nodesFilter });
 
-    nodeFilterSelector.addEventListener("change", (e) => {
+    substanceFilterSelector.addEventListener("change", (e) => {
       // set new value to filter variable
-      nodeFilterValue = e.target.value;
+      substanceFilterValue = e.target.value;
       /*
       refresh DataView,
       so that its filter function is re-calculated with the new variable
@@ -77,12 +132,17 @@
       nodesView.refresh();
     });
 
+    pharmFormFilterSelector.addEventListener("change", (e) => {
+      pharmFormFilterValue = e.target.value;
+      nodesView.refresh();
+    });
+
     startNetwork({ nodes: nodesView, edges: edges });
 
     function updateviewnetwork(params) {
-      nodeFilterValue = params["nodes"][0] //the clicked node
-      if (nodeFilterValue == undefined) { //reset with click outside
-        nodeFilterValue = ""
+      substanceFilterValue = params["nodes"][0] //the clicked node
+      if (substanceFilterValue == undefined) { //reset with click outside
+        substanceFilterValue = ""
       }
 
       nodesView.refresh();
