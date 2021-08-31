@@ -24,7 +24,6 @@
   <script type="text/javascript">
     var network;
     var options = {
-    
           physics: {
             hierarchicalRepulsion: {
               avoidOverlap: 100,
@@ -39,15 +38,12 @@
       const container = document.getElementById("mynetwork");
       network = new vis.Network(container, data, options);
     }
-    var nodesDataset = new vis.DataSet(nodes); // these come from WorldCup2014.js
-    var edgesDataset = new vis.DataSet(edges); // these come from WorldCup2014.js
+    var nodesDataset = new vis.DataSet(nodes); 
+    var edgesDataset = new vis.DataSet(edges); 
     // get a JSON object
     allNodes = nodesDataset.get({ returnType: "Object" });
-    allEdges = edgesDataset.get({ returnType: "Object" });
-
-
-
-    function get_neibours(node, degrees, selectedNode) {
+    allEdges = edgesDataset.get({ returnType: "Object" })
+    function get_connected_nodes(node, degrees, selectedNode) {
       if (node.id == selectedNode) {
         return true;
       }
@@ -61,17 +57,11 @@
     }
 
 
-    function return_node_neighbours(node) {
-      result = get_neibours(node, 2, nodeFilterValue)
-      //      console.log(result)
-      return result;
-    }
-
     const nodesFilter = (node) => {
       if (nodeFilterValue === "") {
         return node.productType === "substance";
       }
-      return return_node_neighbours(node)
+      return get_connected_nodes(node,2,nodeFilterValue)
 
     };
 
@@ -91,8 +81,8 @@
     startNetwork({ nodes: nodesView, edges: edges });
 
     function updateviewnetwork(params) {
-      nodeFilterValue = params["nodes"][0]
-      if (nodeFilterValue == undefined) { //reset
+      nodeFilterValue = params["nodes"][0] //the clicked node
+      if (nodeFilterValue == undefined) { //reset with click outside
         nodeFilterValue = ""
       }
 
