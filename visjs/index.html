@@ -53,7 +53,7 @@
       <div class="col-3">
         <label>
           Product Level
-          <select id="Level">
+          <select id="LevelFilterSelect">
             <option value="">All Levels</option>
 
           </select>
@@ -66,8 +66,6 @@
 
   <br />
   <script type="text/javascript">
-
-
     var network;
     var options = {
       physics: {
@@ -76,12 +74,17 @@
         },
       },
     };
+
     let substanceFilterValue = "";
     let pharmFormFilterValue = "";
+    let routeFilterValue = "";
+    let LevelFilterValue = "";
+    let nodeFilterValue = "";
 
     const substanceFilterSelector = document.getElementById("substanceFilterSelect");
     const pharmFormFilterSelector = document.getElementById("PharmFormFilterSelect");
-    const LevelFilterSelector = document.getElementById("Level");
+    const RouteFilterSelector = document.getElementById("RouteFilterSelect");
+    const LevelFilterSelector = document.getElementById("LevelFilterSelect");
 
     var nodesDataset = new vis.DataSet(nodes);
     var edgesDataset = new vis.DataSet(edges);
@@ -101,7 +104,7 @@
       uniqueArray.forEach(function (item) {
         var newOption = document.createElement("option");
         newOption.text = item.toString();//item.whateverProperty
-        if (item==="All Levels"){
+        if (item === "All Levels") {
           newOption.value = ""
 
         }
@@ -110,13 +113,52 @@
         //new select items should populated immediately
       });
     }
+    var filternodes = [];
+    function get_all_nodes_from_root(rootNode, degrees) {
+      level2Nodes = [];
+      level3Nodes = [];
+      level4Nodes = [];
+
+      for (edge in allEdges) {
+        if (allEdges[edge].to === rootNode) {
+          if (!level2Nodes.includes(allEdges[edge].from)) {
+            level2Nodes.push(allEdges[edge].from)
+          }
+        }
+      }
+      for (edge in allEdges) {
+        if (level2Nodes.includes(allEdges[edge].to)) {
+          if (!level3Nodes.includes(allEdges[edge].from)) {
+            level3Nodes.push(allEdges[edge].from)
+          }
+        }
+      }
+      for (edge in allEdges) {
+        if (level3Nodes.includes(allEdges[edge].to)) {
+          if (!level4Nodes.includes(allEdges[edge].from)) {
+            level4Nodes.push(allEdges[edge].from)
+          }
+        }
+      }
+      if (degrees === 4) {
+        return level2Nodes.concat(level3Nodes, level4Nodes);
+      }
+      if (degrees === 3) {
+        return level2Nodes.concat(level3Nodes);
+      }
+      if (degrees === 2) {
+        return level2Node
+      }
+    };
+
     function startNetwork(data) {
       const container = document.getElementById("mynetwork");
       network = new vis.Network(container, data, options);
       populate_select()
     }
 
-    function get_connected_nodes(node, degrees, selectedNode, pharmForm) {
+
+    function get_connected_nodes(node, degrees, selectedNode, pharmForm, route, level) {
       if (node.id == selectedNode) {
         return true;
       }
@@ -124,8 +166,17 @@
         console.log(pharmForm)
         return false;
       }
+      if (route != "" && node.route != route) {
+        console.log(route)
+        return false;
+      }
+      if (level != "" && node.level != level) {
+        console.log(level)
+        return false;
+      }
 
       if (selectedNode == "") { //no selection, only selector
+        console.log("noselectedNode")
         for (edge in allEdges) {
           if (allEdges[edge].from === node.id || allEdges[edge].to === node.id) {
 
@@ -146,10 +197,33 @@
     }
 
     const nodesFilter = (node) => {
-      if (substanceFilterValue === "" && pharmFormFilterValue === "") {//default
-        return node.productType === "substance";
+      if (substanceFilterValue === "" && pharmFormFilterValue === "" && routeFilterValue === "" && LevelFilterValue === "") {//default
+        return node.productType === "substance";//default
       }
-      return get_connected_nodes(node, 2, substanceFilterValue, pharmFormFilterValue)
+      if (pharmFormFilterValue != "" && node.pharmForm != pharmFormFilterValue) {
+        filternodes = filternodes.filter(item => item !== node.id)
+        return false;
+      }
+      if (routeFilterValue != "" && node.route != routeFilterValue) {
+        filternodes = filternodes.filter(item => item !== node.id)
+
+        return false;
+      }
+      if (LevelFilterValue != "" && node.productType != LevelFilterValue) {
+        filternodes = filternodes.filter(item => item !== node.id)
+
+        return false;
+      }
+      if (nodeFilterValue != "") {
+        //for clicking
+        return get_connected_nodes(node, 2, substanceFilterValue, pharmFormFilterValue, routeFilterValue, LevelFilterValue)
+
+      }
+      if (substanceFilterValue != "") {
+        if (filternodes.includes(node.id)) {
+          return true;
+        }
+      }
 
     };
 
@@ -158,6 +232,8 @@
     substanceFilterSelector.addEventListener("change", (e) => {
       // set new value to filter variable
       substanceFilterValue = e.target.value;
+      filternodes = get_all_nodes_from_root(substanceFilterValue, 3)
+
       /*
       refresh DataView,
       so that its filter function is re-calculated with the new variable
@@ -173,16 +249,15 @@
     startNetwork({ nodes: nodesView, edges: edges });
 
     function updateviewnetwork(params) {
+      nodeFilterValue = params["nodes"][0]
       substanceFilterValue = params["nodes"][0] //the clicked node
       if (substanceFilterValue == undefined) { //reset with click outside
         substanceFilterValue = ""
       }
       populate_select();
       nodesView.refresh();
+      nodeFilterValue="";
     }
-
-
-
 
 
     network.on("click", updateviewnetwork);
