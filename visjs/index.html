@@ -35,8 +35,7 @@
           Pharmaceutical Form
           <select id="PharmFormFilterSelect">
             <option value="">All Forms</option>
-            <option value="Comprimido">CP</option>
-            <option value="Solução Oral">SO</option>
+
           </select>
         </label>
       </div>
@@ -45,8 +44,7 @@
           Route
           <select id="RouteFilterSelect">
             <option value="">All Routes</option>
-            <option value="Oral">Oral</option>
-            <option value="Prefusão">Perfusão</option>
+
           </select>
         </label>
       </div>
@@ -74,6 +72,8 @@
         },
       },
     };
+    var filternodes = [];
+
 
     let substanceFilterValue = "";
     let pharmFormFilterValue = "";
@@ -92,7 +92,8 @@
     allNodes = nodesDataset.get({ returnType: "Object" });
     allEdges = edgesDataset.get({ returnType: "Object" })
 
-    function populate_select() { //change for more convenience
+
+    function populate_level_select() { //change for more convenience
       var nodeArray = nodesView.get()
       LevelFilterSelector.innerText = null; //remove
       var uniqueArray = ["All Levels"];
@@ -112,8 +113,54 @@
         LevelFilterSelector.add(newOption);
         //new select items should populated immediately
       });
-    }
-    var filternodes = [];
+    };
+
+    function populate_route_select() { //change for more convenience
+      var nodeArray = nodesView.get()
+      RouteFilterSelector.innerText = null; //remove
+      var uniqueArray = ["All Routes"];
+      nodeArray.forEach(function (item) {
+        if (!(uniqueArray.includes(item.route))) {
+          uniqueArray.push(item.route)
+        }
+      });
+      uniqueArray.forEach(function (item) {
+        var newOption = document.createElement("option");
+        newOption.text = item.toString();//item.whateverProperty
+        if (item === "All Routes") {
+          newOption.value = ""
+
+        }
+        newOption.value = item.toString();//item.whateverProperty
+        RouteFilterSelector.add(newOption);
+        //new select items should populated immediately
+      });
+    };
+
+    function populate_pharmForm_select() { //change for more convenience
+      var nodeArray = nodesView.get()
+      console.log(nodeArray)
+      pharmFormFilterSelector.innerText = null; //remove
+      var uniqueArray = ["All Forms"];
+      nodeArray.forEach(function (item) {
+        if (!(uniqueArray.includes(item.pharmForm))) {
+          uniqueArray.push(item.pharmForm)
+        }
+      });
+      uniqueArray.forEach(function (item) {
+        var newOption = document.createElement("option");
+        newOption.text = item.toString();//item.whateverProperty
+        if (item === "All Forms") {
+          newOption.value = ""
+
+        }
+        newOption.value = item.toString();//item.whateverProperty
+        pharmFormFilterSelector.add(newOption);
+        //new select items should populated immediately
+      });
+    };
+
+
     function get_all_nodes_from_root(rootNode, degrees) {
       level2Nodes = [];
       level3Nodes = [];
@@ -154,7 +201,9 @@
     function startNetwork(data) {
       const container = document.getElementById("mynetwork");
       network = new vis.Network(container, data, options);
-      populate_select()
+      populate_level_select();
+      populate_pharmForm_select();
+      populate_route_select();
     }
 
 
@@ -239,11 +288,31 @@
       so that its filter function is re-calculated with the new variable
     */
       nodesView.refresh();
+      populate_level_select();
+      populate_pharmForm_select();
+      populate_route_select();
     });
 
     pharmFormFilterSelector.addEventListener("change", (e) => {
       pharmFormFilterValue = e.target.value;
       nodesView.refresh();
+      populate_level_select()
+      populate_route_select()
+    });
+
+    LevelFilterSelector.addEventListener("change", (e) => {
+      LevelFilterValue = e.target.value;
+      nodesView.refresh();
+      populate_pharmForm_select()
+      populate_route_select()
+    });
+
+    RouteFilterSelector.addEventListener("change", (e) => {
+      routeFilterValue = e.target.value;
+      nodesView.refresh();
+      populate_level_select()
+      populate_pharmForm_select()
+
     });
 
     startNetwork({ nodes: nodesView, edges: edges });
@@ -254,7 +323,9 @@
       if (substanceFilterValue == undefined) { //reset with click outside
         substanceFilterValue = ""
       }
-      populate_select();
+      populate_level_select();
+      populate_pharmForm_select();
+      populate_route_select();
       nodesView.refresh();
       nodeFilterValue="";
     }
