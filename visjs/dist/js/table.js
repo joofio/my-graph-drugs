@@ -1,8 +1,9 @@
 $(document).ready(function () {
+ // $('#example thead tr').clone(true).addClass('filters').appendTo( '#example thead' );
 
   var table = $('#example').DataTable({
    // lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
-    pageLength: 25,
+    pageLength: 5,
     orderCellsTop: true,
     fixedHeader: true,
   //  search: {
@@ -10,8 +11,6 @@ $(document).ready(function () {
    // },
     data: nodes,
     "columns": [
-        { data: "name",render:function ( data, type, row, meta ){
-            return '<a href="'+row.id+'">'+row.label.split("\n")[0]+'</a>'}}, //problem with select
       { data: "productType",
       "defaultContent": "<i>Not Applicable</i>" },
       { data: "doseForm",
@@ -24,6 +23,9 @@ $(document).ready(function () {
              "defaultContent": "<button type=\"button\" class=\"btn btn-primary\">See graph</button>" }
 
     ], 
+
+
+    
     initComplete: function () {
       count = 0;
       this.api().columns().every(function () {
@@ -31,9 +33,8 @@ $(document).ready(function () {
         //replace spaces with dashes
         title = $(title).html().replace(/[\W]/g, '-');
         var column = this;
-        console.log(column.footer())
         var select = $('<select id="' + title + '" class="select2" ></select>')
-          .appendTo($(column.footer()).empty())
+          .appendTo($(column.header(2)))
           .on('change', function () {
             //Get the "text" property from each selected data 
             //regex escape the value and store in array
@@ -54,8 +55,9 @@ $(document).ready(function () {
               .search(val ? val : '', true, false)
               .draw();
           });
-
+        console.log(column);
         column.data().unique().sort().each(function (d, j) {
+
           select.append('<option value="' + d + '">' + d + '</option>');
         });
 
