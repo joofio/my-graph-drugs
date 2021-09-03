@@ -5,20 +5,25 @@ $(document).ready(function () {
     pageLength: 25,
     orderCellsTop: true,
     fixedHeader: true,
+  //  search: {
+    //    return: true //for only processing when key is pressed - usefull for lots of data
+   // },
     data: nodes,
     "columns": [
-      { data: "id" },
+        { data: "name",render:function ( data, type, row, meta ){
+            return '<a href="'+row.id+'">'+row.label.split("\n")[0]+'</a>'}}, //problem with select
       { data: "productType",
       "defaultContent": "<i>Not Applicable</i>" },
       { data: "doseForm",
-      "defaultContent": "<i>Not Applicable</i>" },
+      "defaultContent": "<i>Not Applicable</i>",render:function ( data ) {
+        return '<a href="'+data+'">'+data+'</a>';} },//links
       { data: "route",
       "defaultContent": "<i>Not Applicable</i>" },
-      { data: "label" },
+      { data: "label"},
       { data: "Graph",
              "defaultContent": "<button type=\"button\" class=\"btn btn-primary\">See graph</button>" }
 
-    ],
+    ], 
     initComplete: function () {
       count = 0;
       this.api().columns().every(function () {
@@ -26,6 +31,7 @@ $(document).ready(function () {
         //replace spaces with dashes
         title = $(title).html().replace(/[\W]/g, '-');
         var column = this;
+        console.log(column.footer())
         var select = $('<select id="' + title + '" class="select2" ></select>')
           .appendTo($(column.footer()).empty())
           .on('change', function () {
