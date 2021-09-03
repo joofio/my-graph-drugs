@@ -16,7 +16,7 @@ $(document).ready(function () {
       "defaultContent": "<i>Not Applicable</i>" },
       { data: "label" },
       { data: "Graph",
-             "defaultContent": "<i>Not Applicable</i>" }
+             "defaultContent": "<button type=\"button\" class=\"btn btn-primary\">See graph</button>" }
 
     ],
     initComplete: function () {
