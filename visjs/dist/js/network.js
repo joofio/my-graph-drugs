@@ -20,8 +20,8 @@ let routeFilterValue = "";
 let LevelFilterValue = "";
 let nodeFilterValue = "";
 
-if (params.get("substance")!=""){
-     nodeFilterValue = params.get("substance");
+if (params.get("substance") != "") {
+    nodeFilterValue = params.get("substance");
 
 }
 
@@ -103,7 +103,7 @@ function populate_pharmForm_select() { //change for more convenience
         newOption.value = item.toString();//item.whateverProperty
 
         if (item.toString() === "All Forms") {
-            
+
             newOption.value = ""
         }
         pharmFormFilterSelector.add(newOption);
@@ -185,15 +185,13 @@ const nodesFilter = (node) => {
     var doesnt_check = true
     if (substanceFilterValue === "" && pharmFormFilterValue === "" && routeFilterValue === "" && LevelFilterValue === "" && nodeFilterValue === "") {//default
         // return node.productType === "substance";//default
-        doesnt_check= get_connected_nodes(node, nodeFilterValue, "MedicationKnowledge/1113")
+        doesnt_check = get_connected_nodes(node, nodeFilterValue, "MedicationKnowledge/1113")
 
     }
-    if (nodeFilterValue != "" || substanceFilterValue !="") {
+    if (nodeFilterValue != "" || substanceFilterValue != "") { //clicked or substance selected
         //for clicking
-        doesnt_check= get_connected_nodes(node, nodeFilterValue, substanceFilterValue)
+        doesnt_check = get_connected_nodes(node, nodeFilterValue, substanceFilterValue)
     }
-
-
 
     if (pharmFormFilterValue != "" && node.doseForm != pharmFormFilterValue) {
         doesnt_check = false;
@@ -215,11 +213,11 @@ const nodesView = new vis.DataView(nodesDataset, { filter: nodesFilter });
 substanceFilterSelector.addEventListener("change", (e) => {
     // set new value to filter variable
     substanceFilterValue = e.target.value;
-     pharmFormFilterValue = "";
- routeFilterValue = "";
- LevelFilterValue = "";
- nodeFilterValue = "";
-   // filternodes = get_all_nodes_from_root(substanceFilterValue, 3)
+    pharmFormFilterValue = "";
+    routeFilterValue = "";
+    LevelFilterValue = "";
+    nodeFilterValue = "";
+    // filternodes = get_all_nodes_from_root(substanceFilterValue, 3)
 
     /*
     refresh DataView,
@@ -233,27 +231,20 @@ pharmFormFilterSelector.addEventListener("change", (e) => {
     pharmFormFilterValue = e.target.value;
     //filternodes = nodesView.getIds();
     nodesView.refresh();
-
-
 });
 
 LevelFilterSelector.addEventListener("change", (e) => {
     //  filternodes = nodesView.getIds();
-   // nodeFilterValue = "";
+    // nodeFilterValue = "";
     LevelFilterValue = e.target.value;
     nodesView.refresh();
-
 });
 
 
 RouteFilterSelector.addEventListener("change", (e) => {
     // filternodes = nodesView.getIds();
-
     routeFilterValue = e.target.value;
-
     nodesView.refresh();
-
-
 });
 
 startNetwork({ nodes: nodesView, edges: edges });
