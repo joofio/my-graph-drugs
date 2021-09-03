@@ -24,8 +24,6 @@ $(document).ready(function () {
 
     ], 
 
-
-    
     initComplete: function () {
       count = 0;
       this.api().columns().every(function () {
