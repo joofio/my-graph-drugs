@@ -7,7 +7,6 @@
     integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
     crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-  <script src="main3.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
   <style>
@@ -15,9 +14,12 @@
       border: 1px solid black;
     }
   </style>
+    <script src="main3.js"></script>
+
 </head>
 
 <body>
+
   <div class="container-fluid">
     <h2>Drug Graph Network</h2>
     <div class="row">
@@ -25,7 +27,7 @@
         <label>
           Substance
           <select id="substanceFilterSelect">
-            <option value="">All Substances</option>
+            <option value="">View Default</option>
             <option value="MedicationKnowledge/1112">Diclofenac</option>
             <option value="MedicationKnowledge/1113">Paracetamol</option>
           </select>
@@ -62,312 +64,8 @@
     <br>
     <div id="mynetwork"></div>
   </div>
+  <script src="dist/js/network.js"></script>
 
-  <br />
-  <script type="text/javascript">
-    var network;
-    var options = {
-      physics: {
-        hierarchicalRepulsion: {
-          avoidOverlap: 50,
-        },
-      },
-    };
-    var filternodes = [];
-
-    let substanceFilterValue = "";
-    let pharmFormFilterValue = "";
-    let routeFilterValue = "";
-    let LevelFilterValue = "";
-    let nodeFilterValue = "";
-
-    const substanceFilterSelector = document.getElementById("substanceFilterSelect");
-    const pharmFormFilterSelector = document.getElementById("PharmFormFilterSelect");
-    const RouteFilterSelector = document.getElementById("RouteFilterSelect");
-    const LevelFilterSelector = document.getElementById("LevelFilterSelect");
-
-    var nodesDataset = new vis.DataSet(nodes);
-    var edgesDataset = new vis.DataSet(edges);
-    // get a JSON object
-    allNodes = nodesDataset.get({ returnType: "Object" });
-    allEdges = edgesDataset.get({ returnType: "Object" })
-
-
-    function populate_level_select() { //change for more convenience
-      var nodeArray = nodesView.get()
-      LevelFilterSelector.innerText = null; //remove
-      if (LevelFilterValue === "") {
-        var uniqueArray = ["All Levels"];
-
-      } else {
-        var uniqueArray = [LevelFilterValue];
-
-      }
-      nodeArray.forEach(function (item) {
-        if (!(uniqueArray.includes(item.productType))) {
-          uniqueArray.push(item.productType)
-        }
-      });
-      uniqueArray.forEach(function (item) {
-        var newOption = document.createElement("option");
-        newOption.text = item.toString();//item.whateverProperty
-        if (item === "All Levels") {
-          newOption.value = ""
-
-        }
-        newOption.value = item.toString();//item.whateverProperty
-        LevelFilterSelector.add(newOption);
-        //new select items should populated immediately
-      });
-    };
-
-    function populate_route_select() { //change for more convenience
-      var nodeArray = nodesView.get()
-      RouteFilterSelector.innerText = null; //remove
-      if (routeFilterValue === "") {
-        var uniqueArray = ["All Routes"];
-
-      } else {
-        var uniqueArray = [routeFilterValue];
-
-      }
-      var uniqueArray = ["All Routes"];
-      nodeArray.forEach(function (item) {
-        if ((item.hasOwnProperty('route')) & (!(uniqueArray.includes(item.route)))) {
-          uniqueArray.push(item.route)
-        }
-      });
-      uniqueArray.forEach(function (item) {
-        var newOption = document.createElement("option");
-        newOption.text = item.toString();//item.whateverProperty
-        if (item === "All Routes") {
-          newOption.value = ""
-
-        }
-        newOption.value = item.toString();//item.whateverProperty
-        RouteFilterSelector.add(newOption);
-        //new select items should populated immediately
-      });
-    };
-
-    function populate_pharmForm_select() { //change for more convenience
-      var nodeArray = nodesView.get()
-      //console.log(nodeArray)
-      pharmFormFilterSelector.innerText = null; //remove
-      if (pharmFormFilterValue === "") {
-        var uniqueArray = ["All Forms"];
-
-      } else {
-        var uniqueArray = [pharmFormFilterValue];
-
-      }
-      nodeArray.forEach(function (item) {
-        if ((item.hasOwnProperty('doseForm')) & (!(uniqueArray.includes(item.doseForm)))) {
-          uniqueArray.push(item.doseForm)
-        }
-      });
-      uniqueArray.forEach(function (item) {
-        var newOption = document.createElement("option");
-        newOption.text = item.toString();//item.whateverProperty
-        if (item === "All Forms") {
-          newOption.value = ""
-        }
-        newOption.value = item.toString();//item.whateverProperty
-        pharmFormFilterSelector.add(newOption);
-        //new select items should populated immediately
-      });
-    };
-
-
-    function get_all_nodes_from_root(rootNode, degrees) {
-      var level2Nodes = [];
-      var level3Nodes = [];
-      var level4Nodes = [];
-
-      for (edge in allEdges) {
-        if (allEdges[edge].to === rootNode) {
-          if (!level2Nodes.includes(allEdges[edge].from)) {
-            level2Nodes.push(allEdges[edge].from)
-          }
-        }
-      }
-      for (edge in allEdges) {
-        if (level2Nodes.includes(allEdges[edge].to)) {
-          if (!level3Nodes.includes(allEdges[edge].from)) {
-            level3Nodes.push(allEdges[edge].from)
-          }
-        }
-      }
-      for (edge in allEdges) {
-        if (level3Nodes.includes(allEdges[edge].to)) {
-          if (!level4Nodes.includes(allEdges[edge].from)) {
-            level4Nodes.push(allEdges[edge].from)
-          }
-        }
-      }
-      if (degrees === 4) {
-        return level2Nodes.concat(level3Nodes, level4Nodes);
-      }
-      if (degrees === 3) {
-        return level2Nodes.concat(level3Nodes);
-      }
-      if (degrees === 2) {
-        return level2Node
-      }
-    };
-
-    function startNetwork(data) {
-      const container = document.getElementById("mynetwork");
-      network = new vis.Network(container, data, options);
-      populate_level_select();
-      populate_pharmForm_select();
-      populate_route_select();
-    }
-
-
-    function get_connected_nodes(node, selectedNode, substance, pharmForm, route, level,) {
-      if (node.id == selectedNode) {
-        return true;
-      }
-      if (pharmForm != "" && node.doseForm != pharmForm) {
-        // console.log(pharmForm)
-        return false;
-      }
-      if (route != "" && node.route != route) {
-        // console.log(route)
-        return false;
-      }
-      if (level != "" && node.level != level) {
-        //  console.log(level)
-        return false;
-      }
-      for (edge in allEdges) {
-        if ((allEdges[edge].from === node.id && allEdges[edge].to === selectedNode) || (allEdges[edge].from === selectedNode && allEdges[edge].to === node.id)) {
-          return true;
-        }
-      }
-      return false;
-
-    }
-
-    const nodesFilter = (node) => {
-      /**
-       * Main function for filtering
-       * has the attributes defined and if the attributes are not "" and the objects have them and 
-       * are contained inside the current filter - return true
-       * everything else - return false
-       * 
-       * 
-       * **/
-      //  console.log(nodeFilterValue)
-      
-      var doesnt_check = true
-      if (substanceFilterValue === "" && pharmFormFilterValue === "" && routeFilterValue === "" && LevelFilterValue === "" && nodeFilterValue === "") {//default
-        return node.productType === "substance";//default
-      }
-      if (nodeFilterValue != "") {
-        //for clicking
-        return get_connected_nodes(node, nodeFilterValue, substanceFilterValue, pharmFormFilterValue, routeFilterValue, LevelFilterValue)
-      }
-
-
-      if (pharmFormFilterValue != "" && node.doseForm != pharmFormFilterValue) {
-        doesnt_check = false;
-      }
-
-      if (routeFilterValue != "" && node.route != routeFilterValue) {
-        doesnt_check = false;
-      }
-
-      if (LevelFilterValue != "" && node.productType != LevelFilterValue) {
-        doesnt_check = false
-      }
-
- 
-
-      if (doesnt_check) {
-        if (!(filternodes.includes(node.id)))   // Returns true
-        {
-          doesnt_check = false;
-        }else{
-          doesnt_check=true;
-        }
-      }
-      return doesnt_check
-    };
-
-    const nodesView = new vis.DataView(nodesDataset, { filter: nodesFilter });
-
-    substanceFilterSelector.addEventListener("change", (e) => {
-      // set new value to filter variable
-      substanceFilterValue = e.target.value;
-      filternodes = get_all_nodes_from_root(substanceFilterValue, 3)
-
-      /*
-      refresh DataView,
-      so that its filter function is re-calculated with the new variable
-    */
-      nodesView.refresh();
-      populate_level_select();
-      populate_pharmForm_select();
-      populate_route_select();
-    });
-
-    pharmFormFilterSelector.addEventListener("change", (e) => {
-      pharmFormFilterValue = e.target.value;
-      filternodes = nodesView.getIds();
-      nodesView.refresh();
-      populate_level_select()
-      populate_route_select()
-      populate_pharmForm_select()
-
-    });
-
-    LevelFilterSelector.addEventListener("change", (e) => {
-      filternodes = nodesView.getIds();
-      nodeFilterValue = "";
-      LevelFilterValue = e.target.value;
-      nodesView.refresh();
-      populate_level_select()
-      populate_pharmForm_select()
-      populate_route_select()
-    });
-
-
-    RouteFilterSelector.addEventListener("change", (e) => {
-      filternodes = nodesView.getIds();
-
-      routeFilterValue = e.target.value;
-
-      nodesView.refresh();
-      populate_level_select()
-      populate_pharmForm_select()
-      populate_route_select()
-
-
-    });
-
-    startNetwork({ nodes: nodesView, edges: edges });
-
-    function updateviewnetwork(params) {
-      nodeFilterValue = params["nodes"][0]//the clicked node
-      if (nodeFilterValue == undefined) { //reset with click outside
-        nodeFilterValue = ""
-        substanceFilterValue = "";
-        pharmFormFilterValue = "";
-        routeFilterValue = "";
-        LevelFilterValue = "";
-      }
-      populate_level_select();
-      populate_pharmForm_select();
-      populate_route_select();
-      nodesView.refresh();
-    }
-
-
-    network.on("click", updateviewnetwork);
-
-  </script>
 </body>
 
 </html>

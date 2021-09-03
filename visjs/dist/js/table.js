@@ -19,8 +19,8 @@ $(document).ready(function () {
       { data: "route",
       "defaultContent": "<i>Not Applicable</i>" },
       { data: "label"},
-      { data: "Graph",
-             "defaultContent": "<button type=\"button\" class=\"btn btn-primary\">See graph</button>" }
+      { data: "id",render:function ( data ) {
+        return '<a class="btn btn-primary" href="index.html?substance='+data+'" role="button">See Graph</a>';} } 
 
     ], 
 
