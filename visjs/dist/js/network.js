@@ -20,7 +20,7 @@ let routeFilterValue = "";
 let LevelFilterValue = "";
 let nodeFilterValue = "";
 
-if (params.get("substance") != "") {
+if (params.get("substance") != undefined) {
     nodeFilterValue = params.get("substance");
 
 }
@@ -32,38 +32,40 @@ const pharmFormFilterSelector = document.getElementById("PharmFormFilterSelect")
 const RouteFilterSelector = document.getElementById("RouteFilterSelect");
 const LevelFilterSelector = document.getElementById("LevelFilterSelect");
 
+var nodesDataset = new vis.DataSet(nodes);
+var edgesDataset = new vis.DataSet(edges);
 
-const nodesDataset = new vis.DataSet();
-const edgesDataset = new vis.DataSet();
+// get a JSON object
+allNodes = nodesDataset.get({ returnType: "Object" });
+allEdges = edgesDataset.get({ returnType: "Object" })
 
-
+/*
 // Now using `then`
 function getNodes(){
     return $.getJSON('data/nodes.json', function (node) {
         nodesDataset.add(node);
     });
   };
-getNodes();
+getNodes().done(function(data){
+
+    console.log("node created")
+});
 
 $.getJSON('data/edges.json', function (edge) {
     edgesDataset.add(edge);
 });
 
 
-// get a JSON object
-const allNodes = nodesDataset.get({ returnType: "Object" });
-const allEdges = edgesDataset.get({ returnType: "Object" });
-
 console.log(nodesDataset)
 console.log(allNodes);
-
+//problem with being assynchronous
+*/
 
 function populate_level_select() { //change for more convenience
     LevelFilterSelector.innerText = null; //remove
     var uniqueArray = ["All Levels"];
 
     Object.entries(allNodes).forEach(function (item) {
-        console.log(item)
         if (!(uniqueArray.includes(item[1].productType))) {
             uniqueArray.push(item[1].productType)
         }
@@ -171,6 +173,11 @@ populate_level_select();
 populate_pharmForm_select();
 populate_route_select();
 function startNetwork(data) {
+
+    // get a JSON object
+    const allEdges = edgesDataset.get({ returnType: "Object" });
+    allNodes = nodesDataset.get({ returnType: "Object" });
+
     const container = document.getElementById("mynetwork");
     network = new vis.Network(container, data, options);
 }
@@ -266,7 +273,7 @@ RouteFilterSelector.addEventListener("change", (e) => {
     nodesView.refresh();
 });
 const nodesView = new vis.DataView(nodesDataset, { filter: nodesFilter });
-const edgesView =new vis.DataView(edgesDataset);
+const edgesView = new vis.DataView(edgesDataset);
 
 startNetwork({ nodes: nodesView, edges: edgesView });
 
