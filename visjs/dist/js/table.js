@@ -10,16 +10,20 @@ $(document).ready(function () {
     //    return: true //for only processing when key is pressed - usefull for lots of data
    // },
    // data: nodes,
-   "ajax": "../../data/data.json",
+   "ajax": "data/data.json",
     "columns": [
-      { data: "productType",
-      "defaultContent": "<i>Not Applicable</i>" },
+      { data: "id"},
+
+      { data: "name"},
+
+     
       { data: "doseForm",
       "defaultContent": "<i>Not Applicable</i>",render:function ( data ) {
         return '<a href="'+data+'">'+data+'</a>';} },//links
       { data: "route",
       "defaultContent": "<i>Not Applicable</i>" },
-      { data: "label"},
+      { data: "productType",
+      "defaultContent": "<i>Not Applicable</i>" },
       { data: "id",render:function ( data ) {
         return '<a class="btn btn-primary" href="index.html?substance='+data+'" role="button">See Graph</a>';} } 
 
