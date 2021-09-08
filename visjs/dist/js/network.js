@@ -36,17 +36,22 @@ const LevelFilterSelector = document.getElementById("LevelFilterSelect");
 var nodesDataset = new vis.DataSet();
 var edgesDataset = new vis.DataSet();
 
-$.getJSON('data/edges.json', function (edges) {
-    edgesDataset.add(edges);
-});
-$.getJSON('data/nodes.json', function (nodes) {
-    nodesDataset.add(nodes);
+$.getJSON('data/nodes.json', function (node) {
+    nodesDataset.add(node);
 });
 
+$.getJSON('data/edges.json', function (edge) {
+    console.log(edge)
+    edgesDataset.add(edge);
+});
+
+console.log(edgesDataset)
 
 // get a JSON object
 allNodes = nodesDataset.get({ returnType: "Object" });
 allEdges = edgesDataset.get({ returnType: "Object" })
+
+
 
 
 function populate_level_select() { //change for more convenience
@@ -217,7 +222,7 @@ const nodesFilter = (node) => {
     return doesnt_check
 };
 
-const nodesView = new vis.DataView(nodesDataset, { filter: nodesFilter });
+
 
 substanceFilterSelector.addEventListener("change", (e) => {
     // set new value to filter variable
@@ -255,6 +260,7 @@ RouteFilterSelector.addEventListener("change", (e) => {
     routeFilterValue = e.target.value;
     nodesView.refresh();
 });
+const nodesView = new vis.DataView(nodesDataset, { filter: nodesFilter });
 
 startNetwork({ nodes: nodesView, edges: edgesDataset });
 
