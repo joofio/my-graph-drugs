@@ -33,8 +33,8 @@ const RouteFilterSelector = document.getElementById("RouteFilterSelect");
 const LevelFilterSelector = document.getElementById("LevelFilterSelect");
 
 
-var nodesDataset = new vis.DataSet();
-var edgesDataset = new vis.DataSet();
+const nodesDataset = new vis.DataSet();
+const edgesDataset = new vis.DataSet();
 
 $.getJSON('data/nodes.json', function (node) {
     nodesDataset.add(node);
@@ -44,19 +44,21 @@ $.getJSON('data/edges.json', function (edge) {
     edgesDataset.add(edge);
 });
 
+
 const edgesView =new vis.DataView(edgesDataset);
 // get a JSON object
-allNodes = nodesDataset.get({ returnType: "Object" });
-allEdges = edgesDataset.get({ returnType: "Object" })
+var allNodes = nodesDataset.get({ returnType: "Object" });
+var allEdges = edgesDataset.get({ returnType: "Object" });
 
-
-
+console.log(nodesDataset)
+console.log(allNodes);
 
 function populate_level_select() { //change for more convenience
     LevelFilterSelector.innerText = null; //remove
     var uniqueArray = ["All Levels"];
 
     Object.entries(allNodes).forEach(function (item) {
+        console.log(item)
         if (!(uniqueArray.includes(item[1].productType))) {
             uniqueArray.push(item[1].productType)
         }
