@@ -9,7 +9,8 @@ $(document).ready(function () {
   //  search: {
     //    return: true //for only processing when key is pressed - usefull for lots of data
    // },
-    data: nodes,
+   // data: nodes,
+   "ajax": "../../data/data.json",
     "columns": [
       { data: "productType",
       "defaultContent": "<i>Not Applicable</i>" },

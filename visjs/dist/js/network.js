@@ -32,8 +32,17 @@ const pharmFormFilterSelector = document.getElementById("PharmFormFilterSelect")
 const RouteFilterSelector = document.getElementById("RouteFilterSelect");
 const LevelFilterSelector = document.getElementById("LevelFilterSelect");
 
-var nodesDataset = new vis.DataSet(nodes);
-var edgesDataset = new vis.DataSet(edges);
+
+var nodesDataset = new vis.DataSet();
+var edgesDataset = new vis.DataSet();
+
+$.getJSON('data/edges.json', function (edges) {
+    edgesDataset.add(edges);
+});
+$.getJSON('data/nodes.json', function (nodes) {
+    nodesDataset.add(nodes);
+});
+
 
 // get a JSON object
 allNodes = nodesDataset.get({ returnType: "Object" });
@@ -247,7 +256,7 @@ RouteFilterSelector.addEventListener("change", (e) => {
     nodesView.refresh();
 });
 
-startNetwork({ nodes: nodesView, edges: edges });
+startNetwork({ nodes: nodesView, edges: edgesDataset });
 
 function updateviewnetwork(params) {
     nodeFilterValue = params["nodes"][0]//the clicked node
