@@ -41,12 +41,10 @@ $.getJSON('data/nodes.json', function (node) {
 });
 
 $.getJSON('data/edges.json', function (edge) {
-    console.log(edge)
     edgesDataset.add(edge);
 });
 
-console.log(edgesDataset)
-
+const edgesView =new vis.DataView(edgesDataset);
 // get a JSON object
 allNodes = nodesDataset.get({ returnType: "Object" });
 allEdges = edgesDataset.get({ returnType: "Object" })
@@ -262,7 +260,7 @@ RouteFilterSelector.addEventListener("change", (e) => {
 });
 const nodesView = new vis.DataView(nodesDataset, { filter: nodesFilter });
 
-startNetwork({ nodes: nodesView, edges: edgesDataset });
+startNetwork({ nodes: nodesView, edges: edgesView });
 
 function updateviewnetwork(params) {
     nodeFilterValue = params["nodes"][0]//the clicked node
