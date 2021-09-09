@@ -211,7 +211,7 @@ const nodesFilter = (node) => {
     var doesnt_check = true
     if (substanceFilterValue === "" && pharmFormFilterValue === "" && routeFilterValue === "" && LevelFilterValue === "" && nodeFilterValue === "") {//default
         // return node.productType === "substance";//default
-        doesnt_check = get_connected_nodes(node, nodeFilterValue, "MedicationKnowledge/1113")
+        doesnt_check = get_connected_nodes(node, nodeFilterValue, "MedicationKnowledge/28")
 
     }
     if (nodeFilterValue != "" || substanceFilterValue != "") { //clicked or substance selected
