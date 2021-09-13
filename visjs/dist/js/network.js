@@ -133,6 +133,24 @@ function populate_pharmForm_select() { //change for more convenience
     });
 };
 
+function populate_substance_select() { //change for more convenience
+        LevelFilterSelector.innerText = null; //remove
+     //   var uniqueArray = [{"value":"","text":"View Default"}];
+    
+        Object.entries(nodes).forEach(function (item) {
+            if (item[1].productType==="Substance") {
+                uniqueArray.push({"value":item[1].id,"text":item[1].name})
+            }
+        });
+        uniqueArray.forEach(function (item) {
+            var newOption = document.createElement("option");
+            newOption.text = item["text"].toString();//item.whateverProperty
+            newOption.value = item["value"].toString();//item.whateverProperty
+    
+            substanceFilterSelector.add(newOption);
+            //new select items should populated immediately
+        });
+    };
 
 function get_all_nodes_from_root(rootNode, degrees) {
     var level2Nodes = [];
@@ -173,6 +191,7 @@ function get_all_nodes_from_root(rootNode, degrees) {
 populate_level_select();
 populate_pharmForm_select();
 populate_route_select();
+populate_substance_select();
 function startNetwork(data) {
 
     // get a JSON object
