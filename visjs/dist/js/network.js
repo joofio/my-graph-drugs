@@ -25,7 +25,7 @@ if (params.get("substance") != undefined) {
 
 }
 
-
+var default_product;
 
 const substanceFilterSelector = document.getElementById("substanceFilterSelect");
 const pharmFormFilterSelector = document.getElementById("PharmFormFilterSelect");
@@ -135,10 +135,15 @@ function populate_pharmForm_select() { //change for more convenience
 
 function populate_substance_select() { //change for more convenience
         LevelFilterSelector.innerText = null; //remove
-     //   var uniqueArray = [{"value":"","text":"View Default"}];
+        var uniqueArray = [{"value":"","text":"View Default"}];
     
         Object.entries(nodes).forEach(function (item) {
+     
             if (item[1].productType==="Substance") {
+                if (uniqueArray.length==1){
+                    console.log(item[1])
+                    default_product=item[1].id;
+                }
                 uniqueArray.push({"value":item[1].id,"text":item[1].name})
             }
         });
@@ -231,7 +236,7 @@ const nodesFilter = (node) => {
     var doesnt_check = true
     if (substanceFilterValue === "" && pharmFormFilterValue === "" && routeFilterValue === "" && LevelFilterValue === "" && nodeFilterValue === "") {//default
         // return node.productType === "substance";//default
-        doesnt_check = get_connected_nodes(node, nodeFilterValue, "MedicationKnowledge/28")
+        doesnt_check = get_connected_nodes(node, nodeFilterValue, default_product)
 
     }
     if (nodeFilterValue != "" || substanceFilterValue != "") { //clicked or substance selected
