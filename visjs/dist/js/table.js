@@ -21,6 +21,8 @@ $(document).ready(function () {
       { data: "doseForm",
       "defaultContent": "<i>Not Applicable</i>",render:function ( data ) {
         return '<a href="'+data+'">'+data+'</a>';} },//links
+        { data: "strength",
+        "defaultContent": "<i>Not Applicable</i>" },
       { data: "route",
       "defaultContent": "<i>Not Applicable</i>" },
       { data: "productType",
