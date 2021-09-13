@@ -13,7 +13,8 @@ $(document).ready(function () {
    "ajax": "data/data.json",
     "columns": [
       { data: "id"},
-
+      {data: "CNPEM",
+      "defaultContent": "<i>Not Available</i>"},
       { data: "name"},
 
      
