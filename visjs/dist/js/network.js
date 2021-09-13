@@ -36,8 +36,9 @@ var nodesDataset = new vis.DataSet(nodes);
 var edgesDataset = new vis.DataSet(edges);
 
 // get a JSON object
-allNodes = nodesDataset.get({ returnType: "Object" });
-allEdges = edgesDataset.get({ returnType: "Object" })
+
+//allNodes = nodesDataset.get({ returnType: "Object" });
+//allEdges = edgesDataset.get({ returnType: "Object" })
 
 /*
 // Now using `then`
@@ -65,7 +66,7 @@ function populate_level_select() { //change for more convenience
     LevelFilterSelector.innerText = null; //remove
     var uniqueArray = ["All Levels"];
 
-    Object.entries(allNodes).forEach(function (item) {
+    Object.entries(nodes).forEach(function (item) {
         if (!(uniqueArray.includes(item[1].productType))) {
             uniqueArray.push(item[1].productType)
         }
@@ -88,7 +89,7 @@ function populate_route_select() { //change for more convenience
     RouteFilterSelector.innerText = null; //remove
     var uniqueArray = ["All Routes"];
 
-    Object.entries(allNodes).forEach(function (item) {
+    Object.entries(nodes).forEach(function (item) {
         if ((item[1].hasOwnProperty('route')) & (!(uniqueArray.includes(item[1].route)))) {
             uniqueArray.push(item[1].route)
         }
@@ -113,7 +114,7 @@ function populate_pharmForm_select() { //change for more convenience
     var uniqueArray = ["All Forms"];
 
 
-    Object.entries(allNodes).forEach(function (item) {
+    Object.entries(nodes).forEach(function (item) {
         if ((item[1].hasOwnProperty('doseForm')) & (!(uniqueArray.includes(item[1].doseForm)))) {
             uniqueArray.push(item[1].doseForm)
         }
@@ -138,24 +139,24 @@ function get_all_nodes_from_root(rootNode, degrees) {
     var level3Nodes = [];
     var level4Nodes = [];
 
-    for (edge in allEdges) {
-        if (allEdges[edge].to === rootNode) {
-            if (!level2Nodes.includes(allEdges[edge].from)) {
-                level2Nodes.push(allEdges[edge].from)
+    for (edge in edges) {
+        if (edges[edge].to === rootNode) {
+            if (!level2Nodes.includes(edges[edge].from)) {
+                level2Nodes.push(edges[edge].from)
             }
         }
     }
-    for (edge in allEdges) {
-        if (level2Nodes.includes(allEdges[edge].to)) {
-            if (!level3Nodes.includes(allEdges[edge].from)) {
-                level3Nodes.push(allEdges[edge].from)
+    for (edge in edges) {
+        if (level2Nodes.includes(edges[edge].to)) {
+            if (!level3Nodes.includes(edges[edge].from)) {
+                level3Nodes.push(edges[edge].from)
             }
         }
     }
-    for (edge in allEdges) {
-        if (level3Nodes.includes(allEdges[edge].to)) {
-            if (!level4Nodes.includes(allEdges[edge].from)) {
-                level4Nodes.push(allEdges[edge].from)
+    for (edge in edges) {
+        if (level3Nodes.includes(edges[edge].to)) {
+            if (!level4Nodes.includes(edges[edge].from)) {
+                level4Nodes.push(edges[edge].from)
             }
         }
     }
@@ -175,8 +176,8 @@ populate_route_select();
 function startNetwork(data) {
 
     // get a JSON object
-    const allEdges = edgesDataset.get({ returnType: "Object" });
-    allNodes = nodesDataset.get({ returnType: "Object" });
+   // const allEdges = edgesDataset.get({ returnType: "Object" });
+   // allNodes = nodesDataset.get({ returnType: "Object" });
 
     const container = document.getElementById("mynetwork");
     network = new vis.Network(container, data, options);
@@ -189,8 +190,8 @@ function get_connected_nodes(node, selectedNode, substance) {
         return true;
     }
 
-    for (edge in allEdges) {
-        if ((allEdges[edge].from === node.id && allEdges[edge].to === check_node) || (allEdges[edge].from === check_node && allEdges[edge].to === node.id)) {
+    for (edge in edges) {
+        if ((edges[edge].from === node.id && edges[edge].to === check_node) || (edges[edge].from === check_node && edges[edge].to === node.id)) {
             return true;
         }
     }
