@@ -12,19 +12,20 @@ $(document).ready(function () {
     // data: nodes,
     "ajax": "data/data.json",
     "columns": [
-     
       {
-        data: "id", render: function (data) {
-          return '<a  href="http://18.193.162.67/fhir/' + data + '">'+data+'</a>';
-        }
-      },
+        data: "productType",
+        "defaultContent": "<i>Not Applicable</i>"
+      }, 
+
       {
         data: "CNPEM",
         "defaultContent": "<i>Not Available</i>"
       },
 
-      { data: "name" },
-
+      { data: "name" , render: function (data,type,row) {
+          return '<a  href="http://18.193.162.67/fhir/' + row.id + '">'+row.name+'</a>';
+        }
+      },
       {
         data: "doseForm",
         "defaultContent": "<i>Not Applicable</i>", render: function (data) {
@@ -45,10 +46,7 @@ $(document).ready(function () {
         "defaultContent": "<i>Not Applicable</i>"
       },
 
-      {
-        data: "productType",
-        "defaultContent": "<i>Not Applicable</i>"
-      }, //http://18.193.162.67/fhir/
+
    
       {
         data: "id", render: function (data) {
@@ -66,7 +64,16 @@ $(document).ready(function () {
         title = $(title).html().replace(/[\W]/g, '-');
         var column = this;
         var select = $('<select id="' + title + '" class="select2" ></select>')
-          .appendTo($(column.header(2)))
+
+        if (title==="Name"){
+          var select = $('<select id="' + title + '" class="select2" style="width: 120%" ></select>')
+
+        }
+        if (title==="Dose Form"){
+          var select = $('<select id="' + title + '" class="select2" style="width: 50%" ></select>')
+
+        }
+          select.appendTo($(column.header(2)))
           .on('change', function () {
             //Get the "text" property from each selected data 
             //regex escape the value and store in array
