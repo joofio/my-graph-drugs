@@ -3,7 +3,7 @@ $(document).ready(function () {
 
   var table = $('#example').DataTable({
     // lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
-    pageLength: 5,
+    pageLength: 10,
     orderCellsTop: true,
     fixedHeader: true,
     //  search: {
@@ -12,8 +12,12 @@ $(document).ready(function () {
     // data: nodes,
     "ajax": "data/data.json",
     "columns": [
-      { data: "id" },
-
+     
+      {
+        data: "id", render: function (data) {
+          return '<a  href="http://18.193.162.67/fhir/' + data + '">'+data+'</a>';
+        }
+      },
       {
         data: "CNPEM",
         "defaultContent": "<i>Not Available</i>"
@@ -44,8 +48,8 @@ $(document).ready(function () {
       {
         data: "productType",
         "defaultContent": "<i>Not Applicable</i>"
-      },
-      
+      }, //http://18.193.162.67/fhir/
+   
       {
         data: "id", render: function (data) {
           return '<a class="btn btn-primary" href="index.html?substance=' + data + '" role="button">See Graph</a>';
