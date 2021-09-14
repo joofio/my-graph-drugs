@@ -66,7 +66,7 @@ $(document).ready(function () {
         var select = $('<select id="' + title + '" class="select2" ></select>')
 
         if (title==="Name"){
-          var select = $('<select id="' + title + '" class="select2" style="width: 120%" ></select>')
+          var select = $('<select id="' + title + '" class="select2" style="width: 100%" ></select>')
 
         }
         if (title==="Dose Form"){
