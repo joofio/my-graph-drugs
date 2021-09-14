@@ -23,7 +23,7 @@ $(document).ready(function () {
       },
 
       { data: "name" , render: function (data,type,row) {
-          return '<a  href="http://18.193.162.67/fhir/' + row.id + '">'+row.name+'</a>';
+          return '<a  href="http://18.193.162.67/fhir/MedicationKnowledge/' + row.id + '">'+row.name+'</a>';
         }
       },
       {
@@ -50,7 +50,7 @@ $(document).ready(function () {
    
       {
         data: "id", render: function (data) {
-          return '<a class="btn btn-primary" href="index.html?substance=' + data + '" role="button">See Graph</a>';
+          return '<a class="btn btn-primary" href="index.html?substance=MedicationKnowledge/' + data + '" role="button">See Graph</a>';
         }
       }
 
