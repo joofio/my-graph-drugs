@@ -15,25 +15,21 @@ $(document).ready(function () {
       {
         data: "productType",
         "defaultContent": "<i>Not Applicable</i>"
-      }, 
+      },
 
       {
         data: "CNPEM",
         "defaultContent": "<i>Not Available</i>"
       },
 
-      { data: "name" , render: function (data,type,row) {
-          return '<a  href="http://18.193.162.67/fhir/MedicationKnowledge/' + row.id + '">'+row.name+'</a>';
+      {
+        data: "name", render: function (data, type, row) {
+          return '<a  href="http://18.193.162.67/fhir/MedicationKnowledge/' + row.id + '">' + row.name + '</a>';
         }
       },
       {
         data: "doseForm",
-        "defaultContent": "<i>Not Applicable</i>", render: function (data) {
-          if (data === undefined) {
-            return '<a><i>Not Applicable</i></a>';
-          }
-          return '<a href="' + data + '">' + data + '</a>';
-        }
+        "defaultContent": "<i>Not Applicable</i>"
       },//links
 
       {
@@ -43,14 +39,18 @@ $(document).ready(function () {
 
       {
         data: "route",
-        "defaultContent": "<i>Not Applicable</i>"
+        "defaultContent": "<i>Not Applicable</i>",render: function (data) {
+          if (data === undefined) {
+            return '<a><i>Not Applicable</i></a>';
+          }
+          return '<a href="https://build.fhir.org/ig/HL7/fhir-ips/ValueSet-medicine-route-of-administration.html">' + data + '</a>';}
       },
 
 
-   
+
       {
         data: "id", render: function (data) {
-          return '<a class="btn btn-primary" href="index.html?substance=MedicationKnowledge/' + data + '" role="button">See Graph</a>';
+          return '<a class="btn btn-primary" href="index.html?substance=MedicationKnowledge/' + data + '" role="button">Graph</a>';
         }
       }
 
@@ -65,15 +65,15 @@ $(document).ready(function () {
         var column = this;
         var select = $('<select id="' + title + '" class="select2" ></select>')
 
-        if (title==="Name"){
+        if (title === "Name") {
           var select = $('<select id="' + title + '" class="select2" style="width: 100%" ></select>')
 
         }
-        if (title==="Dose Form"){
+        if (title === "Dose Form") {
           var select = $('<select id="' + title + '" class="select2" style="width: 50%" ></select>')
 
         }
-          select.appendTo($(column.header(2)))
+        select.appendTo($(column.header(2)))
           .on('change', function () {
             //Get the "text" property from each selected data 
             //regex escape the value and store in array
