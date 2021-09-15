@@ -39,11 +39,12 @@ $(document).ready(function () {
 
       {
         data: "route",
-        "defaultContent": "<i>Not Applicable</i>",render: function (data) {
+        "defaultContent": "<i>Not Applicable</i>", render: function (data) {
           if (data === undefined) {
             return '<a><i>Not Applicable</i></a>';
           }
-          return '<a href="https://build.fhir.org/ig/HL7/fhir-ips/ValueSet-medicine-route-of-administration.html">' + data + '</a>';}
+          return '<a href="https://build.fhir.org/ig/HL7/fhir-ips/ValueSet-medicine-route-of-administration.html">' + data + '</a>';
+        }
       },
 
 
