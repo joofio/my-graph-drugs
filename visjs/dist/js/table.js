@@ -51,7 +51,7 @@ $(document).ready(function () {
 
       {
         data: "id", render: function (data) {
-          return '<a class="btn btn-primary" href="index.html?substance=MedicationKnowledge/' + data + '" role="button">Graph</a>';
+          return '<a class="btn btn-primary" href="index.html?substance=' + data + '" role="button">Graph</a>';
         }
       }
 
